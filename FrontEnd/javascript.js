@@ -9,7 +9,7 @@ const PATH = {
   DELETE_WORK: (id) => `works/${id}`,
 };
 
-/*** GET data db */
+/** GET data db */
 
 async function getData(url) {
   const request = new Request(url, {
@@ -25,10 +25,19 @@ async function getData(url) {
   }
 }
 
+/** Display data */
+
 const gallery = document.querySelector(".gallery");
 
 getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
-  data.map((item, index) => {
-    gallery.innerHTML += ` ${item.title}`;
+  data.map((item) => {
+    const figure = document.createElement("figure");
+    const figcaption = document.createElement("figcaption");
+    const img = document.createElement("img");
+    figcaption.innerHTML = item.title;
+    img.setAttribute("src", item.imageUrl);
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+    gallery.appendChild(figure);
   });
 });
