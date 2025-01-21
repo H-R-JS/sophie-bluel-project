@@ -1,0 +1,32 @@
+const API_URL = "http://localhost:5678/api/";
+const API_LOGIN = "users/login";
+
+/** Login */
+
+const mail = document.querySelector(".log-input.email");
+const passw = document.querySelector(".log-input.password");
+
+const btnSubmit = document.querySelector(".btn-submit");
+btnSubmit.addEventListener("click", login);
+
+async function login(e) {
+  e.preventDefault();
+  const email = mail.value;
+  const password = passw.value;
+  console.log(email, password);
+  try {
+    const res = await fetch(`${API_URL}${API_LOGIN}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1MTg3NDkzOSwiZXhwIjoxNjUxOTYxMzM5fQ.JGN1p8YIfR-M-5eQ-Ypy6Ima5cKA4VbfL2xMr2MgHm4`,
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    localStorage.setItem("user", JSON.stringify(data));
+    window.location.href = "http://127.0.0.1:5500/FrontEnd/";
+  } catch (err) {
+    console.error(err);
+  }
+}

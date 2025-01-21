@@ -2,7 +2,6 @@
 const API_URL = "http://localhost:5678/api/";
 
 const PATH = {
-  LOGIN: "users/login",
   CATEGORIES: "categories",
   GET_WORK: "works",
   POST_WORK: "works",
@@ -86,4 +85,10 @@ function filterFunction(e) {
     getAndDisplay(name);
   }
   getAndDisplay(e.target.innerHTML);
+}
+
+/** Mod Editor */
+
+if (localStorage.getItem("user")) {
+  console.log("it's okay !");
 }
