@@ -29,15 +29,61 @@ async function getData(url) {
 
 const gallery = document.querySelector(".gallery");
 
-getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
-  data.map((item) => {
-    const figure = document.createElement("figure");
-    const figcaption = document.createElement("figcaption");
-    const img = document.createElement("img");
-    figcaption.innerHTML = item.title;
-    img.setAttribute("src", item.imageUrl);
-    figure.appendChild(img);
-    figure.appendChild(figcaption);
-    gallery.appendChild(figure);
+function getAndDisplay(name) {
+  gallery.replaceChildren();
+  getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
+    if (!name) {
+      data.map((item) => {
+        const figure = document.createElement("figure");
+        const figcaption = document.createElement("figcaption");
+        const img = document.createElement("img");
+        figcaption.innerHTML = item.title;
+        img.setAttribute("src", item.imageUrl);
+        figure.appendChild(img);
+        figure.appendChild(figcaption);
+        gallery.appendChild(figure);
+      });
+    } else {
+      const dataFilter = new Set();
+      dataFilter.add(data.filter((n) => n.category.name == name));
+      const dataArray = Array.from(dataFilter)[0];
+      dataArray.map((item) => {
+        const figure = document.createElement("figure");
+        const figcaption = document.createElement("figcaption");
+        const img = document.createElement("img");
+        figcaption.innerHTML = item.title;
+        img.setAttribute("src", item.imageUrl);
+        figure.appendChild(img);
+        figure.appendChild(figcaption);
+        gallery.appendChild(figure);
+      });
+    }
   });
-});
+}
+
+getAndDisplay();
+
+/** Events btns filter */
+
+const btnsBar = document.querySelector(".btns-filter-bar");
+
+btnsBar.addEventListener("click", filterFunction);
+
+function filterFunction(e) {
+  Array.from(btnsBar.children).map((item) => {
+    item.style.backgroundColor = "#fff";
+    item.style.color = "#1d6154";
+  });
+  if (e.target.innerHTML.length <= 24) {
+    e.target.style.backgroundColor = "#1d6154";
+    e.target.style.color = "#fff";
+  }
+  console.log();
+  if (e.target.innerHTML == "Tous") {
+    getAndDisplay(undefined);
+  } else if (e.target.innerHTML.toString().charAt(0) == "H") {
+    const name = e.target.innerHTML.replace("&amp;", "&");
+    getAndDisplay(name);
+  }
+  getAndDisplay(e.target.innerHTML);
+}
