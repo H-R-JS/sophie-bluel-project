@@ -89,6 +89,12 @@ function filterFunction(e) {
 
 /** Mod Editor */
 
+const editBar = document.querySelector(".editor-bar");
+const editBtn = document.querySelector(".btn-modal-editor");
+
 if (localStorage.getItem("user")) {
   console.log("it's okay !");
+  editBar.style.display = "flex";
+  editBtn.style.display = "flex";
+  btnsBar.style.display = "none";
 }
