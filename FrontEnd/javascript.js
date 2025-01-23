@@ -93,8 +93,63 @@ const editBar = document.querySelector(".editor-bar");
 const editBtn = document.querySelector(".btn-modal-editor");
 
 if (localStorage.getItem("user")) {
-  console.log("it's okay !");
   editBar.style.display = "flex";
   editBtn.style.display = "flex";
   btnsBar.style.display = "none";
+}
+
+/** Modal */
+
+const modal = document.querySelector(".modal");
+const mdGallery = document.querySelector(".md-gallery");
+const modalAddData = document.querySelector(".modal-add-data");
+
+const mdIconClose = document.querySelector(".md-icon-close ");
+
+editBtn.addEventListener("click", showModal);
+mdIconClose.addEventListener("click", closeModal);
+
+function showModal() {
+  modal.style.display = "flex";
+}
+
+function closeModal() {
+  modal.style.display = "none";
+}
+
+getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
+  data.map((item) => {
+    const figure = document.createElement("figure");
+    const img = document.createElement("img");
+    const i = document.createElement("i");
+    i.classList.add("md-icon-trash", "fa-solid", "fa-trash-can");
+    img.setAttribute("src", item.imageUrl);
+    img.classList.add("md-img");
+    figure.classList.add("md-figure");
+    i.setAttribute("id", item.id);
+    figure.appendChild(i);
+    figure.appendChild(img);
+    mdGallery.appendChild(figure);
+  });
+});
+
+mdGallery.addEventListener("click", deleteData);
+async function deleteData(e) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const id = e.target.id;
+  if (id !== "") {
+    try {
+      const res = await fetch(`${API_URL}${PATH.DELETE_WORK(id)}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  /** Modal add Data*/
 }
