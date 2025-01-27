@@ -38,6 +38,7 @@ function getAndDisplay(name) {
         const img = document.createElement("img");
         figcaption.innerHTML = item.title;
         img.setAttribute("src", item.imageUrl);
+        img.classList.add("gallery-img");
         figure.appendChild(img);
         figure.appendChild(figcaption);
         gallery.appendChild(figure);
@@ -248,6 +249,18 @@ fileInput.addEventListener("change", () => {
   }
 });
 
+titleValue.addEventListener("input", checkValues);
+select.addEventListener("change", checkValues);
+fileInput.addEventListener("change", checkValues);
+
+function checkValues() {
+  if (titleValue.value !== "" && select.value !== "" && file !== "") {
+    btnAddData.style.backgroundColor = "#1d6154";
+  } else {
+    btnAddData.style.backgroundColor = "#a7a7a7";
+  }
+}
+
 btnAddData.addEventListener("click", postNewData);
 
 const errorAddData = document.querySelector(".error.add-data");
@@ -263,31 +276,32 @@ async function postNewData(e) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!title || !category || !file) {
-    console.log(title, category);
     return errorCatch(errorAddData, "Une ou des informations sont manquantes");
-  }
+  } else {
+    try {
+      const res = await fetch(`${API_URL}${PATH.POST_WORK}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: formData,
+      });
+      if (res.status !== 201) {
+        return errorCatch(errorAddData, "Une erreur s'est produite");
+      } else if (res.status == 201) {
+        imgDisplay.setAttribute("src", "");
+        imgDisplay.style.display = "none";
+        iconImg.style.display = "inline-block";
+        btnAddFile.style.display = "inline-block";
+        imgInfo.style.display = "inline-block";
 
-  try {
-    const res = await fetch(`${API_URL}${PATH.POST_WORK}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: formData,
-    });
-    if (res.status !== 201) {
-      return errorCatch(errorAddData, "Une erreur s'est produite");
-    } else if (res.status == 201) {
-      imgDisplay.setAttribute("src", "");
-      imgDisplay.style.display = "none";
-      iconImg.style.display = "inline-block";
-      btnAddFile.style.display = "noinline-blockne";
-      imgInfo.style.display = "inline-block";
+        titleValue.value = "";
+        select.value = "";
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
   }
-  console.log(file, title, category);
 }
 
 /** Handle error */

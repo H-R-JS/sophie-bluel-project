@@ -296,6 +296,15 @@ footer nav ul {
   margin: 2em;
 }
 
+/** Gallery */
+
+.gallery-img {
+  object-fit: cover;
+  width: 305px;
+  height: 407px;
+  margin-bottom: 5px;
+}
+
 /** Editor */
 
 .editor-bar {
