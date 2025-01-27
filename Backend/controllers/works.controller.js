@@ -7,6 +7,7 @@ exports.findAll = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
+  console.log(req.body.category, "lol", req.file);
   const host = req.get("host");
   const title = req.body.title;
   const categoryId = req.body.category;

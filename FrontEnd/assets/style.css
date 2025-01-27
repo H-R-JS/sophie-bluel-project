@@ -139,6 +139,7 @@ header {
   display: flex;
   justify-content: space-between;
   margin: 50px 0;
+  margin-top: 75px;
 }
 section {
   margin: 50px 0;
@@ -302,6 +303,9 @@ footer nav ul {
   justify-content: center;
   align-items: center;
   gap: 12px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
   width: 100%;
   height: 40px;
   background-color: #000;
@@ -351,7 +355,8 @@ footer nav ul {
   z-index: 1;
 }
 
-.modal-data {
+.modal-data,
+.modal-add-data {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -373,10 +378,10 @@ footer nav ul {
 .md-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 50px;
-  /*margin-top: 50px;*/
+  width: 100%;
+  height: 450px;
 }
 
 .md-title {
@@ -387,13 +392,12 @@ footer nav ul {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  width: 70%;
+  width: 68%;
   height: auto;
 }
 
 .md-figure {
-  background-color: green;
-  width: 18%;
+  width: 75px;
   height: 103px;
   margin-bottom: 15px;
 }
@@ -406,8 +410,8 @@ footer nav ul {
 
 .md-icon-trash {
   position: absolute;
-  margin-top: 7px;
-  margin-left: 60px;
+  margin-top: 6.5px;
+  margin-left: 55px;
   padding: 3px;
   background-color: #000;
   color: #fff;
@@ -416,7 +420,7 @@ footer nav ul {
   cursor: pointer;
 }
 
-.md-btn-container {
+.mad-btn-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -439,6 +443,139 @@ footer nav ul {
 
 .modal-add-data {
   display: none;
+}
+
+.ma-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 91%;
+  margin-top: 20px;
+  font-size: 19px;
+}
+
+.ma-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 70%;
+  margin-top: 20px;
+}
+
+.ma-icon-back {
+  cursor: pointer;
+}
+.ma-icon-close {
+  cursor: pointer;
+}
+
+.ma-title {
+  font-size: 26px;
+  margin-bottom: 25px;
+}
+
+.ma-form-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 170px;
+  background-color: #e8f1f6;
+  border-radius: 3px;
+}
+
+.ma-icon-img {
+  margin-top: 13px;
+  color: #b9c5cc;
+  font-size: 76px;
+}
+
+.ma-input-file {
+  display: none;
+}
+
+.ma-img-display {
+  display: none;
+  object-fit: cover;
+  width: 130px;
+  height: 100%;
+}
+
+.ma-add-img {
+  font-size: 14px;
+  background-color: #b9c5cc;
+  color: #306685;
+  padding: 12px 40px;
+  margin-top: 5px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.ma-info-img {
+  margin-top: 8px;
+  color: #444444;
+  font-size: 10px;
+}
+
+.ma-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 0px;
+}
+
+.ma-input {
+  margin-top: 10px;
+  height: 51px;
+  color: #6c6c6c;
+  font-weight: 400;
+  outline: none;
+  border: none;
+  box-shadow: 0px 4px 14px #00000017;
+}
+
+.ma-select-container {
+  width: 100%;
+}
+
+.ma-select-container select {
+  width: 100%;
+  appearance: none;
+}
+
+.ma-arrow-select {
+  position: absolute;
+  margin-left: -40px;
+  margin-top: 30px;
+  color: #6c6c6c;
+  pointer-events: none;
+}
+
+.ma-input-container label {
+  margin-top: 20px;
+}
+
+.mad-btn-container.ma {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.md-btn-add.data {
+  background-color: #a7a7a7;
+  padding: 0 100px;
+}
+
+.error {
+  display: none;
+  position: absolute;
+  margin-top: 100px;
+  padding: 10px;
+  background-color: rgb(191, 33, 33);
+  color: #fff;
+}
+
+.error.login {
+  margin-top: 140px;
 }
 
 /** Login page */

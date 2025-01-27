@@ -5,6 +5,7 @@ const API_LOGIN = "users/login";
 
 const mail = document.querySelector(".log-input.email");
 const passw = document.querySelector(".log-input.password");
+const errorLogin = document.querySelector(".error.login");
 
 const btnSubmit = document.querySelector(".btn-submit");
 btnSubmit.addEventListener("click", login);

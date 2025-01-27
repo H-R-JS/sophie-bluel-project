@@ -96,11 +96,54 @@
             <h3 class="md-title">Galerie photo</h3>
             <div class="md-gallery"></div>
           </div>
-          <div class="md-btn-container">
+          <div class="mad-btn-container">
             <button class="md-btn-add">Ajouter une photo</button>
           </div>
         </div>
-        <div class="modal-add-data"></div>
+        <div class="modal-add-data">
+          <div class="ma-bar">
+            <i class="ma-icon-back fa-solid fa-arrow-left"></i>
+            <i class="ma-icon-close fa-solid fa-xmark"></i>
+          </div>
+          <form class="ma-form">
+            <h3 class="ma-title">Ajout photo</h3>
+            <div class="ma-form-img">
+              <i class="ma-icon-img fa-regular fa-image"></i>
+              <img
+                src="/FrontEnd/assets/images/Malt-juniper.jpg"
+                class="ma-img-display"
+                alt="Photo choisi"
+              />
+              <input type="file" class="ma-input-file" />
+              <span class="ma-add-img">+ Ajouter photo</span>
+              <p class="ma-info-img">jpg, png : 4mo max</p>
+            </div>
+            <div class="ma-input-container">
+              <label for="title">Titre</label>
+              <input
+                class="ma-input title"
+                type="text"
+                name="title"
+                id="title"
+              />
+              <label for="categories">Categorie</label>
+              <div class="ma-select-container">
+                <select
+                  class="ma-input select"
+                  name="categories"
+                  id="categories"
+                >
+                  <option value=""></option>
+                </select>
+                <i class="ma-arrow-select fa-solid fa-angle-down"></i>
+              </div>
+            </div>
+            <div class="mad-btn-container ma">
+              <button class="md-btn-add data">Valider</button>
+              <span class="error add-data"></span>
+            </div>
+          </form>
+        </div>
       </section>
     </main>
 

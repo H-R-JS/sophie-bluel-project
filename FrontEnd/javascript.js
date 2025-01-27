@@ -77,7 +77,6 @@ function filterFunction(e) {
     e.target.style.backgroundColor = "#1d6154";
     e.target.style.color = "#fff";
   }
-  console.log();
   if (e.target.innerHTML == "Tous") {
     getAndDisplay(undefined);
   } else if (e.target.innerHTML.toString().charAt(0) == "H") {
@@ -102,7 +101,6 @@ if (localStorage.getItem("user")) {
 
 const modal = document.querySelector(".modal");
 const mdGallery = document.querySelector(".md-gallery");
-const modalAddData = document.querySelector(".modal-add-data");
 
 const mdIconClose = document.querySelector(".md-icon-close ");
 
@@ -146,10 +144,161 @@ async function deleteData(e) {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      console.log(res);
+      if (res.status == 204) {
+        mdGallery.replaceChildren();
+        getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
+          data.map((item) => {
+            const figure = document.createElement("figure");
+            const img = document.createElement("img");
+            const i = document.createElement("i");
+            i.classList.add("md-icon-trash", "fa-solid", "fa-trash-can");
+            img.setAttribute("src", item.imageUrl);
+            img.classList.add("md-img");
+            figure.classList.add("md-figure");
+            i.setAttribute("id", item.id);
+            figure.appendChild(i);
+            figure.appendChild(img);
+            mdGallery.appendChild(figure);
+          });
+        });
+      }
     } catch (err) {
       console.error(err);
     }
   }
-  /** Modal add Data*/
 }
+
+/** Modal add Data*/
+
+const btnModalAddData = document.querySelector(".md-btn-add");
+const modalAddData = document.querySelector(".modal-add-data");
+const modalData = document.querySelector(".modal-data");
+
+const barModalData = document.querySelector(".ma-bar");
+
+btnModalAddData.addEventListener("click", showModalAdd);
+
+function showModalAdd() {
+  modalAddData.style.display = "flex";
+  modalData.style.display = "none";
+}
+
+barModalData.addEventListener("click", closeAndBack);
+
+function closeAndBack(e) {
+  if (e.target.classList.contains("ma-icon-back")) {
+    modalAddData.style.display = "none";
+    modalData.style.display = "flex";
+  } else if (e.target.classList.contains("ma-icon-close")) {
+    closeModal();
+  }
+}
+
+const select = document.querySelector(".select");
+
+getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
+  const categoriesNames = [];
+  const categoriesId = [];
+
+  data.forEach((element, index) => {
+    const nameCategory = element.category.name;
+    if (!categoriesNames.includes(nameCategory)) {
+      categoriesNames.push(nameCategory);
+      categoriesId.push(element.category.id);
+    }
+  });
+  categoriesNames.map((item, index) => {
+    const option = document.createElement("option");
+    option.setAttribute("value", categoriesId[index]);
+    option.innerHTML = item;
+    select.appendChild(option);
+  });
+});
+
+/** Add and display file */
+
+const btnAddData = document.querySelector(".md-btn-add.data");
+const titleValue = document.querySelector(".ma-input.title");
+const formImg = document.querySelector(".ma-form-img");
+
+const iconImg = formImg.children[0];
+const imgDisplay = formImg.children[1];
+const fileInput = formImg.children[2];
+const btnAddFile = formImg.children[3];
+const imgInfo = formImg.children[4];
+
+console.log(formImg.children[4]);
+
+btnAddFile.addEventListener("click", () => {
+  fileInput.click();
+});
+
+let file = "";
+
+fileInput.addEventListener("change", () => {
+  if (fileInput.files[0].name) {
+    file = fileInput.files[0];
+    imgDisplay.setAttribute("src", `/FrontEnd/assets/images/${file.name}`);
+    imgDisplay.style.display = "inline-block";
+    iconImg.style.display = "none";
+    btnAddFile.style.display = "none";
+    imgInfo.style.display = "none";
+  } else {
+    return;
+  }
+});
+
+btnAddData.addEventListener("click", postNewData);
+
+const errorAddData = document.querySelector(".error.add-data");
+
+async function postNewData(e) {
+  e.preventDefault();
+  const title = titleValue.value;
+  const category = select.value;
+  const formData = new FormData();
+  formData.append("image", file);
+  formData.append("title", title);
+  formData.append("category", category);
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!title || !category || !file) {
+    console.log(title, category);
+    return errorCatch(errorAddData, "Une ou des informations sont manquantes");
+  }
+
+  try {
+    const res = await fetch(`${API_URL}${PATH.POST_WORK}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: formData,
+    });
+    if (res.status !== 201) {
+      return errorCatch(errorAddData, "Une erreur s'est produite");
+    } else if (res.status == 201) {
+      imgDisplay.setAttribute("src", "");
+      imgDisplay.style.display = "none";
+      iconImg.style.display = "inline-block";
+      btnAddFile.style.display = "noinline-blockne";
+      imgInfo.style.display = "inline-block";
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  console.log(file, title, category);
+}
+
+/** Handle error */
+
+function errorCatch(errorElement, text) {
+  errorElement.innerHTML = `${text}`;
+  errorElement.style.display = "inline-block";
+}
+
+function closeError(errorElement) {
+  errorElement.style.display = "none";
+}
+
+/** Malt & Juniper - New York */
