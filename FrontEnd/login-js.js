@@ -15,19 +15,37 @@ async function login(e) {
   const email = mail.value;
   const password = passw.value;
   console.log(email, password);
-  try {
-    const res = await fetch(`${API_URL}${API_LOGIN}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1MTg3NDkzOSwiZXhwIjoxNjUxOTYxMzM5fQ.JGN1p8YIfR-M-5eQ-Ypy6Ima5cKA4VbfL2xMr2MgHm4`,
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
-    localStorage.setItem("user", JSON.stringify(data));
-    window.location.href = "http://127.0.0.1:5500/FrontEnd/";
-  } catch (err) {
-    console.error(err);
+
+  if (!email || !password) {
+    console.log(email);
+    errorCatch(errorLogin, "Une ou des informations sont manquantes");
+  } else {
+    try {
+      const res = await fetch(`${API_URL}${API_LOGIN}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1MTg3NDkzOSwiZXhwIjoxNjUxOTYxMzM5fQ.JGN1p8YIfR-M-5eQ-Ypy6Ima5cKA4VbfL2xMr2MgHm4`,
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (res.status == 200) {
+        const data = await res.json();
+        localStorage.setItem("user", JSON.stringify(data));
+        window.location.href = "http://127.0.0.1:5500/FrontEnd/";
+      } else {
+        errorCatch(
+          errorLogin,
+          "Une erreur s'est produite ou une information est éronnée "
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
+}
+
+function errorCatch(errorElement, text) {
+  errorElement.innerHTML = `${text}`;
+  errorElement.style.display = "inline-block";
 }
