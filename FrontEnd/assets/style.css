@@ -212,42 +212,12 @@ a:hover {
 #introduction p {
   margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
   text-align: center;
   margin-bottom: 1em;
 }
 
-.btns-filter-bar {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 50px 0;
-}
-
-.btn-filter {
-  padding: 8px 25px;
-  background-color: #fff;
-  color: #1d6154;
-  font-family: "Syne";
-  font-size: 16px;
-  font-weight: 700;
-  border: 2px solid #1d6154;
-  border-radius: 60px;
-  outline: none;
-  cursor: pointer;
-}
-
-.gallery {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
-}
-
-.gallery img {
-  width: 100%;
-}
 #contact {
   width: 50%;
   margin: auto;
@@ -298,6 +268,38 @@ footer nav ul {
 
 /** Gallery */
 
+.btns-filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-filter {
+  padding: 8px 25px;
+  background-color: #fff;
+  color: #1d6154;
+  font-family: "Syne";
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid #1d6154;
+  border-radius: 60px;
+  outline: none;
+  cursor: pointer;
+}
+
+.gallery {
+  margin-top: 40px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+.gallery img {
+  width: 100%;
+}
+
 .gallery-img {
   object-fit: cover;
   width: 305px;
@@ -334,8 +336,8 @@ footer nav ul {
   display: flex;
   justify-content: center;
   margin-top: 140px;
-  margin-bottom: 60px;
-  margin-left: 100px;
+  margin-bottom: 30px;
+  margin-left: 0px;
 }
 
 .btn-modal-editor {
@@ -405,7 +407,7 @@ footer nav ul {
   height: auto;
 }
 
-.md-figure {
+.md-gallery figure {
   width: 75px;
   height: 103px;
   margin-bottom: 15px;

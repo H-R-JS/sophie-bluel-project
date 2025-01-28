@@ -17,7 +17,6 @@ async function getData(url) {
   try {
     const res = await fetch(request);
     const result = await res.json();
-    console.log(result);
     return result;
   } catch (err) {
     console.error(err);
@@ -32,32 +31,28 @@ function getAndDisplay(name) {
   gallery.replaceChildren();
   getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
     if (!name) {
-      data.map((item) => {
-        const figure = document.createElement("figure");
-        const figcaption = document.createElement("figcaption");
-        const img = document.createElement("img");
-        figcaption.innerHTML = item.title;
-        img.setAttribute("src", item.imageUrl);
-        img.classList.add("gallery-img");
-        figure.appendChild(img);
-        figure.appendChild(figcaption);
-        gallery.appendChild(figure);
-      });
+      mapDataGallery(data);
     } else {
       const dataFilter = new Set();
       dataFilter.add(data.filter((n) => n.category.name == name));
       const dataArray = Array.from(dataFilter)[0];
-      dataArray.map((item) => {
-        const figure = document.createElement("figure");
-        const figcaption = document.createElement("figcaption");
-        const img = document.createElement("img");
-        figcaption.innerHTML = item.title;
-        img.setAttribute("src", item.imageUrl);
-        figure.appendChild(img);
-        figure.appendChild(figcaption);
-        gallery.appendChild(figure);
-      });
+      mapDataGallery(dataArray);
     }
+  });
+}
+
+function mapDataGallery(data) {
+  data.map((item) => {
+    const figure = document.createElement("figure");
+    const figcaption = document.createElement("figcaption");
+    const img = document.createElement("img");
+    figcaption.innerHTML = item.title;
+    img.setAttribute("src", item.imageUrl);
+    img.classList.add("gallery-img");
+    figure.setAttribute("id", item.id);
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+    gallery.appendChild(figure);
   });
 }
 
@@ -91,11 +86,17 @@ function filterFunction(e) {
 
 const editBar = document.querySelector(".editor-bar");
 const editBtn = document.querySelector(".btn-modal-editor");
+const btnLogin = document.querySelector(".menu-login-btn");
 
 if (localStorage.getItem("user")) {
   editBar.style.display = "flex";
   editBtn.style.display = "flex";
   btnsBar.style.display = "none";
+  btnLogin.innerHTML = "logout";
+
+  btnLogin.addEventListener("click", () => {
+    localStorage.removeItem("user");
+  });
 }
 
 /** Modal */
@@ -117,22 +118,11 @@ function closeModal() {
 }
 
 getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
-  data.map((item) => {
-    const figure = document.createElement("figure");
-    const img = document.createElement("img");
-    const i = document.createElement("i");
-    i.classList.add("md-icon-trash", "fa-solid", "fa-trash-can");
-    img.setAttribute("src", item.imageUrl);
-    img.classList.add("md-img");
-    figure.classList.add("md-figure");
-    i.setAttribute("id", item.id);
-    figure.appendChild(i);
-    figure.appendChild(img);
-    mdGallery.appendChild(figure);
-  });
+  mapDataModal(data);
 });
 
 mdGallery.addEventListener("click", deleteData);
+
 async function deleteData(e) {
   const user = JSON.parse(localStorage.getItem("user"));
   const id = e.target.id;
@@ -146,27 +136,36 @@ async function deleteData(e) {
         },
       });
       if (res.status == 204) {
-        mdGallery.replaceChildren();
-        getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
-          data.map((item) => {
-            const figure = document.createElement("figure");
-            const img = document.createElement("img");
-            const i = document.createElement("i");
-            i.classList.add("md-icon-trash", "fa-solid", "fa-trash-can");
-            img.setAttribute("src", item.imageUrl);
-            img.classList.add("md-img");
-            figure.classList.add("md-figure");
-            i.setAttribute("id", item.id);
-            figure.appendChild(i);
-            figure.appendChild(img);
-            mdGallery.appendChild(figure);
-          });
-        });
+        getChildDelete(mdGallery, id);
+        getChildDelete(gallery, id);
       }
     } catch (err) {
       console.error(err);
     }
   }
+}
+
+function getChildDelete(parent, id) {
+  let test = Array.from(parent.children).filter(
+    (n) => n.getAttribute("id") == id
+  );
+  parent.removeChild(test[0]);
+}
+
+function mapDataModal(data) {
+  data.map((item) => {
+    const figure = document.createElement("figure");
+    const img = document.createElement("img");
+    const i = document.createElement("i");
+    i.classList.add("md-icon-trash", "fa-solid", "fa-trash-can");
+    img.setAttribute("src", item.imageUrl);
+    img.classList.add("md-img");
+    i.setAttribute("id", item.id);
+    figure.setAttribute("id", item.id);
+    figure.appendChild(i);
+    figure.appendChild(img);
+    mdGallery.appendChild(figure);
+  });
 }
 
 /** Modal add Data*/
@@ -197,21 +196,11 @@ function closeAndBack(e) {
 
 const select = document.querySelector(".select");
 
-getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
-  const categoriesNames = [];
-  const categoriesId = [];
-
-  data.forEach((element, index) => {
-    const nameCategory = element.category.name;
-    if (!categoriesNames.includes(nameCategory)) {
-      categoriesNames.push(nameCategory);
-      categoriesId.push(element.category.id);
-    }
-  });
-  categoriesNames.map((item, index) => {
+getData(`${API_URL}${PATH.CATEGORIES}`).then((data) => {
+  data.map((item, index) => {
     const option = document.createElement("option");
-    option.setAttribute("value", categoriesId[index]);
-    option.innerHTML = item;
+    option.setAttribute("value", item.id);
+    option.innerHTML = item.name;
     select.appendChild(option);
   });
 });
@@ -227,8 +216,6 @@ const imgDisplay = formImg.children[1];
 const fileInput = formImg.children[2];
 const btnAddFile = formImg.children[3];
 const imgInfo = formImg.children[4];
-
-console.log(formImg.children[4]);
 
 btnAddFile.addEventListener("click", () => {
   fileInput.click();

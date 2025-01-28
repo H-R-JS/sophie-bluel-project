@@ -7,7 +7,6 @@ exports.findAll = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  console.log(req.body.category, "lol", req.file);
   const host = req.get("host");
   const title = req.body.title;
   const categoryId = req.body.category;
@@ -27,7 +26,6 @@ exports.create = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  console.log(req.params.id, "looooool");
   try {
     await Works.destroy({ where: { id: req.params.id } });
     return res.status(204).json({ message: "Work Deleted Successfully" });
