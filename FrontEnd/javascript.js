@@ -183,6 +183,11 @@ function showModalAdd() {
   modalData.style.display = "none";
 }
 
+function closeModalAdd() {
+  modalAddData.style.display = "none";
+  modalData.style.display = "flex";
+}
+
 barModalData.addEventListener("click", closeAndBack);
 
 function closeAndBack(e) {
@@ -226,11 +231,7 @@ let file = "";
 fileInput.addEventListener("change", () => {
   if (fileInput.files[0].name) {
     file = fileInput.files[0];
-    imgDisplay.setAttribute("src", `/FrontEnd/assets/images/${file.name}`);
-    imgDisplay.style.display = "inline-block";
-    iconImg.style.display = "none";
-    btnAddFile.style.display = "none";
-    imgInfo.style.display = "none";
+    displayFormImg(true, file);
   } else {
     return;
   }
@@ -276,18 +277,34 @@ async function postNewData(e) {
       if (res.status !== 201) {
         return errorCatch(errorAddData, "Une erreur s'est produite");
       } else if (res.status == 201) {
-        imgDisplay.setAttribute("src", "");
-        imgDisplay.style.display = "none";
-        iconImg.style.display = "inline-block";
-        btnAddFile.style.display = "inline-block";
-        imgInfo.style.display = "inline-block";
-
-        titleValue.value = "";
-        select.value = "";
+        displayFormImg(false);
+        const newData = [await res.json()];
+        mapDataGallery(newData);
+        mapDataModal(newData);
+        closeModalAdd();
       }
     } catch (err) {
       console.error(err);
     }
+  }
+}
+
+function displayFormImg(bool, file) {
+  if (bool == true) {
+    imgDisplay.setAttribute("src", `/FrontEnd/assets/images/${file.name}`);
+    imgDisplay.style.display = "inline-block";
+    iconImg.style.display = "none";
+    btnAddFile.style.display = "none";
+    imgInfo.style.display = "none";
+  } else if (bool == false) {
+    fileInput.value = "";
+    imgDisplay.setAttribute("src", "");
+    imgDisplay.style.display = "none";
+    iconImg.style.display = "inline-block";
+    btnAddFile.style.display = "inline-block";
+    imgInfo.style.display = "inline-block";
+    titleValue.value = "";
+    select.value = "";
   }
 }
 
@@ -301,5 +318,3 @@ function errorCatch(errorElement, text) {
 function closeError(errorElement) {
   errorElement.style.display = "none";
 }
-
-/** Malt & Juniper - New York */
