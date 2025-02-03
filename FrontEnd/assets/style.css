@@ -574,6 +574,7 @@ footer nav ul {
 .md-btn-add.data {
   background-color: #a7a7a7;
   padding: 0 100px;
+  pointer-events: none;
 }
 
 .error {

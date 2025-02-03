@@ -8,6 +8,40 @@ const PATH = {
   DELETE_WORK: (id) => `works/${id}`,
 };
 
+/** Variable Global */
+const gallery = document.querySelector(".gallery");
+
+const btnsBar = document.querySelector(".btns-filter-bar");
+
+const editBar = document.querySelector(".editor-bar");
+const editBtn = document.querySelector(".btn-modal-editor");
+const btnLogin = document.querySelector(".menu-login-btn");
+
+const modal = document.querySelector(".modal");
+const mdGallery = document.querySelector(".md-gallery");
+
+const mdIconClose = document.querySelector(".md-icon-close ");
+
+const btnModalAddData = document.querySelector(".md-btn-add");
+const modalAddData = document.querySelector(".modal-add-data");
+const modalData = document.querySelector(".modal-data");
+
+const barModalData = document.querySelector(".ma-bar");
+const select = document.querySelector(".select");
+
+const btnAddData = document.querySelector(".md-btn-add.data");
+const titleValue = document.querySelector(".ma-input.title");
+const formImg = document.querySelector(".ma-form-img");
+
+const errorAddData = document.querySelector(".error.add-data");
+
+const iconImg = formImg.children[0];
+const imgDisplay = formImg.children[1];
+const fileInput = formImg.children[2];
+const btnAddFile = formImg.children[3];
+const imgInfo = formImg.children[4];
+
+let file = "";
 /** GET data db */
 
 async function getData(url) {
@@ -25,23 +59,21 @@ async function getData(url) {
 
 /** Display data */
 
-const gallery = document.querySelector(".gallery");
-
 function getAndDisplay(name) {
   gallery.replaceChildren();
   getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
     if (!name) {
-      mapDataGallery(data);
+      mapImageGallery(data);
     } else {
       const dataFilter = new Set();
       dataFilter.add(data.filter((n) => n.category.name == name));
       const dataArray = Array.from(dataFilter)[0];
-      mapDataGallery(dataArray);
+      mapImageGallery(dataArray);
     }
   });
 }
 
-function mapDataGallery(data) {
+function mapImageGallery(data) {
   data.map((item) => {
     const figure = document.createElement("figure");
     const figcaption = document.createElement("figcaption");
@@ -60,11 +92,9 @@ getAndDisplay();
 
 /** Events btns filter */
 
-const btnsBar = document.querySelector(".btns-filter-bar");
+btnsBar.addEventListener("click", filterImageFunction);
 
-btnsBar.addEventListener("click", filterFunction);
-
-function filterFunction(e) {
+function filterImageFunction(e) {
   Array.from(btnsBar.children).map((item) => {
     item.style.backgroundColor = "#fff";
     item.style.color = "#1d6154";
@@ -84,27 +114,22 @@ function filterFunction(e) {
 
 /** Mod Editor */
 
-const editBar = document.querySelector(".editor-bar");
-const editBtn = document.querySelector(".btn-modal-editor");
-const btnLogin = document.querySelector(".menu-login-btn");
+displayModEditor("user");
 
-if (localStorage.getItem("user")) {
-  editBar.style.display = "flex";
-  editBtn.style.display = "flex";
-  btnsBar.style.display = "none";
-  btnLogin.innerHTML = "logout";
+function displayModEditor(item) {
+  if (localStorage.getItem(item)) {
+    editBar.style.display = "flex";
+    editBtn.style.display = "flex";
+    btnsBar.style.display = "none";
+    btnLogin.innerHTML = "logout";
 
-  btnLogin.addEventListener("click", () => {
-    localStorage.removeItem("user");
-  });
+    btnLogin.addEventListener("click", () => {
+      localStorage.removeItem(item);
+    });
+  }
 }
 
 /** Modal */
-
-const modal = document.querySelector(".modal");
-const mdGallery = document.querySelector(".md-gallery");
-
-const mdIconClose = document.querySelector(".md-icon-close ");
 
 editBtn.addEventListener("click", showModal);
 mdIconClose.addEventListener("click", closeModal);
@@ -118,12 +143,12 @@ function closeModal() {
 }
 
 getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
-  mapDataModal(data);
+  mapImageModal(data);
 });
 
-mdGallery.addEventListener("click", deleteData);
+mdGallery.addEventListener("click", deleteImage);
 
-async function deleteData(e) {
+async function deleteImage(e) {
   const user = JSON.parse(localStorage.getItem("user"));
   const id = e.target.id;
   if (id !== "") {
@@ -151,8 +176,8 @@ function getChildDelete(parent, id) {
   );
   parent.removeChild(test[0]);
 }
-
-function mapDataModal(data) {
+// Display images
+function mapImageModal(data) {
   data.map((item) => {
     const figure = document.createElement("figure");
     const img = document.createElement("img");
@@ -170,12 +195,6 @@ function mapDataModal(data) {
 
 /** Modal add Data*/
 
-const btnModalAddData = document.querySelector(".md-btn-add");
-const modalAddData = document.querySelector(".modal-add-data");
-const modalData = document.querySelector(".modal-data");
-
-const barModalData = document.querySelector(".ma-bar");
-
 btnModalAddData.addEventListener("click", showModalAdd);
 
 function showModalAdd() {
@@ -189,44 +208,36 @@ function closeModalAdd() {
 }
 
 barModalData.addEventListener("click", closeAndBack);
-
+// Icon return and Icon close with reset form
 function closeAndBack(e) {
   if (e.target.classList.contains("ma-icon-back")) {
     modalAddData.style.display = "none";
     modalData.style.display = "flex";
+    displayFormImg(false);
   } else if (e.target.classList.contains("ma-icon-close")) {
+    displayFormImg(false);
     closeModal();
   }
 }
 
-const select = document.querySelector(".select");
+getCategories();
 
-getData(`${API_URL}${PATH.CATEGORIES}`).then((data) => {
-  data.map((item, index) => {
-    const option = document.createElement("option");
-    option.setAttribute("value", item.id);
-    option.innerHTML = item.name;
-    select.appendChild(option);
+function getCategories() {
+  getData(`${API_URL}${PATH.CATEGORIES}`).then((data) => {
+    data.map((item, index) => {
+      const option = document.createElement("option");
+      option.setAttribute("value", item.id);
+      option.innerHTML = item.name;
+      select.appendChild(option);
+    });
   });
-});
+}
 
 /** Add and display file */
-
-const btnAddData = document.querySelector(".md-btn-add.data");
-const titleValue = document.querySelector(".ma-input.title");
-const formImg = document.querySelector(".ma-form-img");
-
-const iconImg = formImg.children[0];
-const imgDisplay = formImg.children[1];
-const fileInput = formImg.children[2];
-const btnAddFile = formImg.children[3];
-const imgInfo = formImg.children[4];
 
 btnAddFile.addEventListener("click", () => {
   fileInput.click();
 });
-
-let file = "";
 
 fileInput.addEventListener("change", () => {
   if (fileInput.files[0].name) {
@@ -237,23 +248,23 @@ fileInput.addEventListener("change", () => {
   }
 });
 
-titleValue.addEventListener("input", checkValues);
-select.addEventListener("change", checkValues);
-fileInput.addEventListener("change", checkValues);
-
-function checkValues() {
+titleValue.addEventListener("input", checkValuesForm);
+select.addEventListener("change", checkValuesForm);
+fileInput.addEventListener("change", checkValuesForm);
+// Change color et pointer event btn
+function checkValuesForm() {
   if (titleValue.value !== "" && select.value !== "" && file !== "") {
     btnAddData.style.backgroundColor = "#1d6154";
+    btnAddData.style.pointerEvents = "auto";
   } else {
     btnAddData.style.backgroundColor = "#a7a7a7";
+    btnAddData.style.pointerEvents = "none";
   }
 }
 
-btnAddData.addEventListener("click", postNewData);
+btnAddData.addEventListener("click", addNewImage);
 
-const errorAddData = document.querySelector(".error.add-data");
-
-async function postNewData(e) {
+async function addNewImage(e) {
   e.preventDefault();
   const title = titleValue.value;
   const category = select.value;
@@ -288,7 +299,7 @@ async function postNewData(e) {
     }
   }
 }
-
+// Change display form for add image
 function displayFormImg(bool, file) {
   if (bool == true) {
     imgDisplay.setAttribute("src", `/FrontEnd/assets/images/${file.name}`);
@@ -297,14 +308,13 @@ function displayFormImg(bool, file) {
     btnAddFile.style.display = "none";
     imgInfo.style.display = "none";
   } else if (bool == false) {
+    document.querySelector(".ma-form").reset();
     fileInput.value = "";
     imgDisplay.setAttribute("src", "");
     imgDisplay.style.display = "none";
     iconImg.style.display = "inline-block";
     btnAddFile.style.display = "inline-block";
     imgInfo.style.display = "inline-block";
-    titleValue.value = "";
-    select.value = "";
   }
 }
 
