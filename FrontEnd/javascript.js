@@ -274,29 +274,33 @@ async function addNewImage(e) {
   formData.append("category", category);
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!title || !category || !file) {
-    return errorCatch(errorAddData, "Une ou des informations sont manquantes");
-  } else {
-    try {
-      const res = await fetch(`${API_URL}${PATH.POST_WORK}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: formData,
-      });
-      if (res.status !== 201) {
-        return errorCatch(errorAddData, "Une erreur s'est produite");
-      } else if (res.status == 201) {
-        displayFormImg(false);
-        const newData = [await res.json()];
-        mapDataGallery(newData);
-        mapDataModal(newData);
-        closeModalAdd();
-      }
-    } catch (err) {
-      console.error(err);
+  try {
+    validFormData(title, category, file);
+    const res = await fetch(`${API_URL}${PATH.POST_WORK}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: formData,
+    });
+    if (res.status !== 201) {
+      return errorCatch(errorAddData, "Une erreur s'est produite");
+    } else if (res.status == 201) {
+      displayFormImg(false);
+      const newData = [await res.json()];
+      mapDataGallery(newData);
+      mapDataModal(newData);
+      closeModalAdd();
     }
+  } catch (err) {
+    console.error(err);
+  }
+}
+// handle error form addImage
+function validFormData(title, category, file) {
+  if (!title || !category || !file) {
+    errorCatch(errorAddData, "Une ou des informations sont manquantes");
+    throw new Error("Une ou des informations sont manquantes");
   }
 }
 // Change display form for add image

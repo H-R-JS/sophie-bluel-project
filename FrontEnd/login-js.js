@@ -8,7 +8,13 @@ const passw = document.querySelector(".log-input.password");
 const errorLogin = document.querySelector(".error.login");
 
 const btnSubmit = document.querySelector(".btn-submit");
+const btnLoginMenu = document.querySelector(".btn-login-menu");
+
 btnSubmit.addEventListener("click", login);
+// Add style to btn menu
+if (window.location.href == "http://127.0.0.1:5502/FrontEnd/login.html") {
+  btnLoginMenu.style.fontWeight = "800";
+}
 
 async function login(e) {
   e.preventDefault();
