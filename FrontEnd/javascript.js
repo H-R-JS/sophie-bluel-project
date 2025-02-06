@@ -286,10 +286,11 @@ async function addNewImage(e) {
     if (res.status !== 201) {
       return errorCatch(errorAddData, "Une erreur s'est produite");
     } else if (res.status == 201) {
+      console.log("lol");
       displayFormImg(false);
       const newData = [await res.json()];
-      mapDataGallery(newData);
-      mapDataModal(newData);
+      mapImageGallery(newData);
+      mapImageModal(newData);
       closeModalAdd();
     }
   } catch (err) {
