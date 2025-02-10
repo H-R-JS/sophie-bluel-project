@@ -379,8 +379,8 @@ footer nav ul {
 
 .md-icon-close {
   position: relative;
-  top: 25px;
-  left: 280px;
+  top: 20px;
+  left: 282px;
   font-size: 16px;
   margin-bottom: 40px;
   cursor: pointer;
@@ -477,6 +477,7 @@ footer nav ul {
   cursor: pointer;
 }
 .ma-icon-close {
+  font-size: 16px;
   cursor: pointer;
 }
 

@@ -116,6 +116,10 @@ function filterImageFunction(e) {
 
 displayModEditor("user");
 
+function removeLocalStorage(item) {
+  localStorage.removeItem(item);
+}
+
 function displayModEditor(item) {
   if (localStorage.getItem(item)) {
     editBar.style.display = "flex";
@@ -124,7 +128,7 @@ function displayModEditor(item) {
     btnLogin.innerHTML = "logout";
 
     btnLogin.addEventListener("click", () => {
-      localStorage.removeItem(item);
+      removeLocalStorage(item);
     });
   }
 }
@@ -133,6 +137,11 @@ function displayModEditor(item) {
 
 editBtn.addEventListener("click", showModal);
 mdIconClose.addEventListener("click", closeModal);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeModal();
+  }
+});
 
 function showModal() {
   modal.style.display = "flex";
@@ -163,6 +172,8 @@ async function deleteImage(e) {
       if (res.status == 204) {
         getChildDelete(mdGallery, id);
         getChildDelete(gallery, id);
+      } else if (res.status !== 204) {
+        validLogout(res);
       }
     } catch (err) {
       console.error(err);
@@ -284,9 +295,9 @@ async function addNewImage(e) {
       body: formData,
     });
     if (res.status !== 201) {
+      validLogout(res);
       return errorCatch(errorAddData, "Une erreur s'est produite");
     } else if (res.status == 201) {
-      console.log("lol");
       displayFormImg(false);
       const newData = [await res.json()];
       mapImageGallery(newData);
@@ -294,7 +305,7 @@ async function addNewImage(e) {
       closeModalAdd();
     }
   } catch (err) {
-    console.error(err);
+    console.error(err, "fffff");
   }
 }
 // handle error form addImage
@@ -332,4 +343,11 @@ function errorCatch(errorElement, text) {
 
 function closeError(errorElement) {
   errorElement.style.display = "none";
+}
+
+function validLogout(res) {
+  if (res.status == 401) {
+    removeLocalStorage("user");
+    window.location.href = "http://127.0.0.1:5502/FrontEnd/login.html";
+  }
 }
