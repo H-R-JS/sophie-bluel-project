@@ -137,6 +137,12 @@ function displayModEditor(item) {
 
 editBtn.addEventListener("click", showModal);
 mdIconClose.addEventListener("click", closeModal);
+//close modal with key and click outside
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    closeModal();
+  }
+});
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeModal();
@@ -156,7 +162,7 @@ getData(`${API_URL}${PATH.GET_WORK}`).then((data) => {
 });
 
 mdGallery.addEventListener("click", deleteImage);
-
+// Delete function
 async function deleteImage(e) {
   const user = JSON.parse(localStorage.getItem("user"));
   const id = e.target.id;
