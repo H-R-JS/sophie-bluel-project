@@ -323,13 +323,13 @@ function validFormData(title, category, file) {
 }
 // Change display form for add image
 function displayFormImg(bool, file) {
-  if (bool == true) {
-    imgDisplay.setAttribute("src", `/FrontEnd/assets/images/${file.name}`);
+  if (bool) {
+    displayImgUrl(file);
     imgDisplay.style.display = "inline-block";
     iconImg.style.display = "none";
     btnAddFile.style.display = "none";
     imgInfo.style.display = "none";
-  } else if (bool == false) {
+  } else if (!bool) {
     document.querySelector(".ma-form").reset();
     fileInput.value = "";
     imgDisplay.setAttribute("src", "");
@@ -338,6 +338,14 @@ function displayFormImg(bool, file) {
     btnAddFile.style.display = "inline-block";
     imgInfo.style.display = "inline-block";
   }
+}
+
+function displayImgUrl(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    imgDisplay.setAttribute("src", e.target.result);
+  };
+  reader.readAsDataURL(file);
 }
 
 /** Handle error */
@@ -354,6 +362,6 @@ function closeError(errorElement) {
 function validLogout(res) {
   if (res.status == 401) {
     removeLocalStorage("user");
-    window.location.href = "http://127.0.0.1:5502/FrontEnd/login.html";
+    window.location.href = "./index.html";
   }
 }

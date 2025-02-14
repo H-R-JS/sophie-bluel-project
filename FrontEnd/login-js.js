@@ -12,7 +12,7 @@ const btnLoginMenu = document.querySelector(".btn-login-menu");
 
 btnSubmit.addEventListener("click", login);
 // Add style to btn menu
-if (window.location.href == "http://127.0.0.1:5502/FrontEnd/login.html") {
+if (window.location.href.includes("login.html")) {
   btnLoginMenu.style.fontWeight = "800";
 }
 
@@ -20,10 +20,8 @@ async function login(e) {
   e.preventDefault();
   const email = mail.value;
   const password = passw.value;
-  console.log(email, password);
 
   if (!email || !password) {
-    console.log(email);
     errorCatch(errorLogin, "Une ou des informations sont manquantes");
   } else {
     try {
@@ -37,7 +35,7 @@ async function login(e) {
       if (res.status == 200) {
         const data = await res.json();
         localStorage.setItem("user", JSON.stringify(data));
-        window.location.href = "http://127.0.0.1:5500/FrontEnd/";
+        window.location.href = "./index.html";
       } else {
         errorCatch(
           errorLogin,
