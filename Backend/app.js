@@ -25,5 +25,9 @@ db.sequelize.sync().then(() => console.log("db is ready"));
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/works", worksRoutes);
+
+app.get("/", (req, res) => {
+  res.send("API is running ✅");
+});
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 module.exports = app;
