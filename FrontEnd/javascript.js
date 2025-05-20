@@ -1,6 +1,6 @@
 /*** Url and path for fetch */
-const API_URL = "http://localhost:5678/api/";
-
+const API_URL = "https://sophie-bluel-project.vercel.app/api/";
+///"http://localhost:5678/api/"
 const PATH = {
   CATEGORIES: "categories",
   GET_WORK: "works",
