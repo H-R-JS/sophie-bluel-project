@@ -35,7 +35,7 @@ async function login(e) {
       if (res.status == 200) {
         const data = await res.json();
         localStorage.setItem("user", JSON.stringify(data));
-        window.location.href = "./index.html";
+        window.location.href = "../index.html";
       } else {
         errorCatch(
           errorLogin,
