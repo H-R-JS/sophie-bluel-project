@@ -1,5 +1,5 @@
 /*** Url and path for fetch */
-const API_URL = "https://sophie-bluel-project.vercel.app/api/";
+const API_URL = "https://sophie-bluel-project.onrender.com/api/";
 ///"http://localhost:5678/api/"
 const PATH = {
   CATEGORIES: "categories",
