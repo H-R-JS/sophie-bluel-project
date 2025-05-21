@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5678/api/";
+const API_URL = "https://sophie-bluel-project.onrender.com/api/";
 const API_LOGIN = "users/login";
 
 /** Login */

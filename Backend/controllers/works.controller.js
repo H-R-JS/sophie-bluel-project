@@ -1,6 +1,7 @@
 const db = require("./../models");
 const Works = db.works;
 const cloudinary = require("../cloudinaryConfig");
+
 exports.findAll = async (req, res) => {
   const works = await Works.findAll({ include: "category" });
   return res.status(200).json(works);
