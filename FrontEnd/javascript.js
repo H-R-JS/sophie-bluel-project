@@ -362,6 +362,6 @@ function closeError(errorElement) {
 function validLogout(res) {
   if (res.status == 401) {
     removeLocalStorage("user");
-    window.location.href = "./index.html";
+    window.location.href = "../index.html";
   }
 }
